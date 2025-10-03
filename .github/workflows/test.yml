@@ -1,0 +1,35 @@
+name: Test Module
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    name: Validate Module
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Validate module.json
+      run: |
+        if ! jq empty module.json; then
+          echo "❌ module.json is not valid JSON"
+          exit 1
+        fi
+        echo "✅ module.json is valid"
+        
+    - name: Check required fields
+      run: |
+        REQUIRED_FIELDS=("name" "title" "description" "version" "minimumCoreVersion" "scripts")
+        for field in "${REQUIRED_FIELDS[@]}"; do
+          if ! jq -e ".$field" module.json > /dev/null; then
+            echo "❌ Missing required field: $field"
+            exit 1
+          fi
+        done
+        echo "✅ All required fields present"
