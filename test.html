@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoundryVTT AI Assistant - Demonstração</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #4a5568;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        
+        .status {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .status.success {
+            border-color: #48bb78;
+            background: #f0fff4;
+        }
+        
+        .status.error {
+            border-color: #f56565;
+            background: #fff5f5;
+        }
+        
+        .button {
+            background: #4299e1;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .button:hover {
+            background: #3182ce;
+            transform: translateY(-2px);
+        }
+        
+        .button.success {
+            background: #48bb78;
+        }
+        
+        .button.warning {
+            background: #ed8936;
+        }
+        
+        .button.danger {
+            background: #f56565;
+        }
+        
+        .log {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 20px 0;
+            white-space: pre-wrap;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .card {
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .card h3 {
+            margin-top: 0;
+            color: #2d3748;
+        }
+        
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+        
+        .stats-table th,
+        .stats-table td {
+            padding: 8px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .stats-table th {
+            background: #edf2f7;
+            font-weight: 600;
+        }
+        
+        .command-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        
+        .command-input:focus {
+            outline: none;
+            border-color: #4299e1;
+        }
+        
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 8px;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4299e1;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 FoundryVTT AI Assistant</h1>
+        <p style="text-align: center; font-size: 1.2em; color: #666;">
+            Demonstração interativa do módulo de IA para FoundryVTT
+        </p>
+        
+        <div id="status" class="status">
+            <span class="emoji">⏳</span>
+            <strong>Status:</strong> Inicializando módulo...
+        </div>
+        
+        <div class="grid">
+            <div class="card">
+                <h3><span class="emoji">🎮</span>Controles Principais</h3>
+                <button class="button" onclick="initializeModule()">Inicializar Módulo</button>
+                <button class="button success" onclick="runDemo()">Executar Demo</button>
+                <button class="button warning" onclick="showStats()">Ver Estatísticas</button>
+                <button class="button danger" onclick="resetModule()">Reset Módulo</button>
+            </div>
+            
+            <div class="card">
+                <h3><span class="emoji">🔐</span>Permissões</h3>
+                <button class="button" onclick="setPermissionLevel('BASIC')">Nível Básico</button>
+                <button class="button" onclick="setPermissionLevel('STANDARD')">Nível Padrão</button>
+                <button class="button" onclick="setPermissionLevel('ADVANCED')">Nível Avançado</button>
+                <button class="button danger" onclick="setPermissionLevel('FULL')">Nível Completo</button>
+            </div>
+            
+            <div class="card">
+                <h3><span class="emoji">🤖</span>Provedores de IA</h3>
+                <button class="button" onclick="setProvider('manus')">Usar Manus</button>
+                <button class="button" onclick="setProvider('openai')">Usar OpenAI</button>
+                <button class="button" onclick="listProviders()">Listar Provedores</button>
+            </div>
+            
+            <div class="card">
+                <h3><span class="emoji">💬</span>Teste de Chat</h3>
+                <input type="text" class="command-input" id="commandInput" placeholder="Digite um comando (ex: /ai help)" onkeypress="handleKeyPress(event)">
+                <button class="button" onclick="sendCommand()">Enviar Comando</button>
+                <button class="button" onclick="testMention()">Testar @AI</button>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h3><span class="emoji">📊</span>Estatísticas do Módulo</h3>
+            <div id="statsContainer">
+                <p>Clique em "Ver Estatísticas" para carregar os dados...</p>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h3><span class="emoji">📝</span>Log de Atividades</h3>
+            <div id="log" class="log">Aguardando inicialização do módulo...\n</div>
+            <button class="button" onclick="clearLog()">Limpar Log</button>
+        </div>
+    </div>
+
+    <!-- Carregar scripts do módulo -->
+    <script type="module">
+        // Simular ambiente FoundryVTT básico
+        window.game = {
+            settings: {
+                get: (module, key) => {
+                    const stored = localStorage.getItem(`${module}.${key}`);
+                    return stored ? JSON.parse(stored) : null;
+                },
+                set: (module, key, value) => {
+                    localStorage.setItem(`${module}.${key}`, JSON.stringify(value));
+                    return Promise.resolve();
+                }
+            },
+            users: {
+                filter: () => [],
+                find: () => null
+            },
+            user: {
+                id: 'demo-user',
+                name: 'Demo User',
+                isGM: true
+            }
+        };
+        
+        window.ui = {
+            notifications: {
+                info: (msg) => log(`ℹ️ ${msg}`),
+                warn: (msg) => log(`⚠️ ${msg}`),
+                error: (msg) => log(`❌ ${msg}`)
+            }
+        };
+        
+        window.ChatMessage = {
+            create: (data) => {
+                log(`💬 Chat: ${data.content}`);
+                return Promise.resolve();
+            }
+        };
+        
+        window.Hooks = {
+            once: (event, callback) => {
+                if (event === 'ready') {
+                    setTimeout(callback, 100);
+                }
+            },
+            on: (event, callback) => {
+                // Simular hooks
+            }
+        };
+        
+        // Função de log
+        window.log = function(message) {
+            const logElement = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logElement.textContent += `[${timestamp}] ${message}\n`;
+            logElement.scrollTop = logElement.scrollHeight;
+        };
+        
+        // Carregar módulo principal
+        import('./scripts/main.js').then(() => {
+            log('✅ Módulo carregado com sucesso!');
+            updateStatus('success', 'Módulo carregado e pronto para uso');
+        }).catch(error => {
+            log(`❌ Erro ao carregar módulo: ${error.message}`);
+            updateStatus('error', `Erro: ${error.message}`);
+        });
+    </script>
+
+    <script>
+        // Funções de interface
+        function updateStatus(type, message) {
+            const statusElement = document.getElementById('status');
+            statusElement.className = `status ${type}`;
+            statusElement.innerHTML = `<span class="emoji">${type === 'success' ? '✅' : type === 'error' ? '❌' : '⏳'}</span><strong>Status:</strong> ${message}`;
+        }
+        
+        function clearLog() {
+            document.getElementById('log').textContent = '';
+        }
+        
+        async function initializeModule() {
+            log('🚀 Inicializando módulo...');
+            try {
+                if (window.aiAssistant) {
+                    log('✅ Módulo já inicializado');
+                    updateStatus('success', 'Módulo inicializado com sucesso');
+                } else {
+                    log('⏳ Aguardando carregamento do módulo...');
+                    updateStatus('', 'Aguardando carregamento...');
+                }
+            } catch (error) {
+                log(`❌ Erro na inicialização: ${error.message}`);
+                updateStatus('error', error.message);
+            }
+        }
+        
+        async function runDemo() {
+            log('🎬 Executando demonstração completa...');
+            try {
+                if (!window.aiAssistant) {
+                    throw new Error('Módulo não inicializado');
+                }
+                
+                // Executar testes básicos
+                log('📊 Obtendo estatísticas...');
+                const stats = window.aiAssistant.getStats();
+                log(`✅ Módulo ativo há ${Math.round(stats.uptime / 1000)}s`);
+                
+                log('🔍 Testando permissões...');
+                const api = window.aiAssistantAPI;
+                const canSend = api.checkPermission('sendMessage');
+                log(`Permissão sendMessage: ${canSend ? '✅' : '❌'}`);
+                
+                log('🤖 Verificando provedores...');
+                const providers = api.getProviders();
+                log(`Provedores disponíveis: ${providers.join(', ')}`);
+                
+                log('💬 Testando interface de chat...');
+                await api.processCommand('/ai help');
+                
+                log('🎉 Demonstração concluída com sucesso!');
+                updateStatus('success', 'Demonstração executada com sucesso');
+                
+            } catch (error) {
+                log(`❌ Erro na demonstração: ${error.message}`);
+                updateStatus('error', error.message);
+            }
+        }
+        
+        async function showStats() {
+            log('📊 Carregando estatísticas...');
+            try {
+                if (!window.aiAssistant) {
+                    throw new Error('Módulo não inicializado');
+                }
+                
+                const stats = window.aiAssistant.getFullStatus();
+                const container = document.getElementById('statsContainer');
+                
+                let html = '<table class="stats-table">';
+                html += '<tr><th>Propriedade</th><th>Valor</th></tr>';
+                
+                // Estatísticas do módulo
+                html += `<tr><td>Inicializado</td><td>${stats.module.initialized ? '✅' : '❌'}</td></tr>`;
+                html += `<tr><td>Uptime</td><td>${Math.round(stats.module.uptime / 1000)}s</td></tr>`;
+                html += `<tr><td>Provedor Atual</td><td>${stats.module.config.defaultProvider}</td></tr>`;
+                html += `<tr><td>Nível de Permissão</td><td>${stats.module.config.defaultPermissionLevel}</td></tr>`;
+                
+                // Estatísticas dos componentes
+                if (stats.components.permissionManager) {
+                    const pm = stats.components.permissionManager;
+                    html += `<tr><td>Permissões Ativas</td><td>${pm.activePermissions}</td></tr>`;
+                    html += `<tr><td>Permissões Temporárias</td><td>${pm.temporaryPermissions}</td></tr>`;
+                }
+                
+                if (stats.components.chatInterface) {
+                    const ci = stats.components.chatInterface;
+                    html += `<tr><td>Comandos Registrados</td><td>${ci.commandsRegistered}</td></tr>`;
+                    html += `<tr><td>Histórico de Conversa</td><td>${ci.conversationHistoryLength}</td></tr>`;
+                }
+                
+                html += '</table>';
+                container.innerHTML = html;
+                
+                log('✅ Estatísticas carregadas');
+                
+            } catch (error) {
+                log(`❌ Erro ao carregar estatísticas: ${error.message}`);
+                document.getElementById('statsContainer').innerHTML = `<p style="color: red;">Erro: ${error.message}</p>`;
+            }
+        }
+        
+        async function setPermissionLevel(level) {
+            log(`🔐 Alterando nível de permissão para: ${level}`);
+            try {
+                if (!window.aiAssistantAPI) {
+                    throw new Error('API não disponível');
+                }
+                
+                await window.aiAssistantAPI.setPermissionLevel(level);
+                log(`✅ Nível de permissão alterado para: ${level}`);
+                
+            } catch (error) {
+                log(`❌ Erro ao alterar permissão: ${error.message}`);
+            }
+        }
+        
+        async function setProvider(provider) {
+            log(`🤖 Alterando provedor para: ${provider}`);
+            try {
+                if (!window.aiAssistantAPI) {
+                    throw new Error('API não disponível');
+                }
+                
+                await window.aiAssistantAPI.setProvider(provider);
+                log(`✅ Provedor alterado para: ${provider}`);
+                
+            } catch (error) {
+                log(`❌ Erro ao alterar provedor: ${error.message}`);
+            }
+        }
+        
+        function listProviders() {
+            log('🔍 Listando provedores disponíveis...');
+            try {
+                if (!window.aiAssistantAPI) {
+                    throw new Error('API não disponível');
+                }
+                
+                const providers = window.aiAssistantAPI.getProviders();
+                const current = window.aiAssistantAPI.getCurrentProvider();
+                
+                log(`Provedores disponíveis: ${providers.join(', ')}`);
+                log(`Provedor atual: ${current}`);
+                
+            } catch (error) {
+                log(`❌ Erro ao listar provedores: ${error.message}`);
+            }
+        }
+        
+        async function sendCommand() {
+            const input = document.getElementById('commandInput');
+            const command = input.value.trim();
+            
+            if (!command) {
+                log('❌ Digite um comando primeiro');
+                return;
+            }
+            
+            log(`💬 Enviando comando: ${command}`);
+            try {
+                if (!window.aiAssistantAPI) {
+                    throw new Error('API não disponível');
+                }
+                
+                await window.aiAssistantAPI.processCommand(command);
+                log(`✅ Comando executado: ${command}`);
+                input.value = '';
+                
+            } catch (error) {
+                log(`❌ Erro ao executar comando: ${error.message}`);
+            }
+        }
+        
+        async function testMention() {
+            log('💬 Testando menção @AI...');
+            try {
+                if (!window.aiAssistantAPI) {
+                    throw new Error('API não disponível');
+                }
+                
+                await window.aiAssistantAPI.processCommand('@AI Olá! Este é um teste de menção.');
+                log('✅ Teste de menção executado');
+                
+            } catch (error) {
+                log(`❌ Erro no teste de menção: ${error.message}`);
+            }
+        }
+        
+        async function resetModule() {
+            log('🔄 Resetando módulo...');
+            try {
+                if (!window.aiAssistantAPI) {
+                    throw new Error('API não disponível');
+                }
+                
+                await window.aiAssistantAPI.resetModule();
+                log('✅ Módulo resetado com sucesso');
+                updateStatus('success', 'Módulo resetado');
+                
+            } catch (error) {
+                log(`❌ Erro ao resetar módulo: ${error.message}`);
+            }
+        }
+        
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendCommand();
+            }
+        }
+        
+        // Inicialização automática
+        setTimeout(() => {
+            initializeModule();
+        }, 1000);
+    </script>
+</body>
+</html>

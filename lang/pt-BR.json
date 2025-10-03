@@ -1,0 +1,21 @@
+{
+    "AI_ASSISTANT": {
+        "Title": "Assistente IA",
+        "Description": "Assistente IA para FoundryVTT",
+        "Settings": {
+            "Provider": "Provedor de IA",
+            "ApiKey": "Chave da API",
+            "Permissions": "Permissões"
+        },
+        "Commands": {
+            "Help": "Mostrar comandos disponíveis",
+            "Status": "Mostrar status do sistema",
+            "Roll": "Rolar dados"
+        },
+        "Messages": {
+            "Initialized": "Assistente IA inicializado com sucesso",
+            "Error": "Erro no Assistente IA",
+            "PermissionDenied": "Permissão negada"
+        }
+    }
+}

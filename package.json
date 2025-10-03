@@ -1,0 +1,142 @@
+{
+  "name": "foundryvtt-ai-assistant",
+  "version": "1.0.0",
+  "description": "Módulo completo para FoundryVTT que integra assistentes de IA (Manus, OpenAI, Claude) diretamente no seu jogo",
+  "main": "scripts/main.js",
+  "type": "module",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint scripts/ --ext .js",
+    "lint:fix": "eslint scripts/ --ext .js --fix",
+    "build": "npm run lint && npm run test",
+    "dev": "npm run build && npm run serve",
+    "serve": "http-server . -p 8080 -c-1",
+    "package": "npm run build && zip -r foundryvtt-ai-assistant.zip module.json scripts/ styles/ lang/ templates/ README.md LICENSE CHANGELOG.md",
+    "release": "npm run package && echo 'Release package created: foundryvtt-ai-assistant.zip'",
+    "docs": "jsdoc scripts/ -d docs/ -r",
+    "validate": "node scripts/validate-module.js",
+    "clean": "rm -rf node_modules/ coverage/ docs/ *.zip"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Felipe-Alves-VNGX/foundryvtt-ai-assistant.git"
+  },
+  "keywords": [
+    "foundryvtt",
+    "foundry",
+    "vtt",
+    "rpg",
+    "ai",
+    "assistant",
+    "manus",
+    "openai",
+    "claude",
+    "automation",
+    "dnd",
+    "pathfinder",
+    "tabletop"
+  ],
+  "author": {
+    "name": "AI Assistant Team",
+    "email": "ai-assistant@example.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Felipe-Alves-VNGX/foundryvtt-ai-assistant/issues"
+  },
+  "homepage": "https://github.com/Felipe-Alves-VNGX/foundryvtt-ai-assistant#readme",
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.8",
+    "eslint": "^8.54.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-n": "^16.3.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "http-server": "^14.1.1",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jsdoc": "^4.0.2"
+  },
+  "dependencies": {},
+  "peerDependencies": {
+    "foundryvtt": ">=10.0.0"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "collectCoverageFrom": [
+      "scripts/**/*.js",
+      "!scripts/**/*.test.js",
+      "!scripts/test/**"
+    ],
+    "coverageDirectory": "coverage",
+    "coverageReporters": [
+      "text",
+      "lcov",
+      "html"
+    ],
+    "testMatch": [
+      "**/tests/**/*.test.js",
+      "**/__tests__/**/*.js"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/tests/setup.js"
+    ]
+  },
+  "eslintConfig": {
+    "extends": [
+      "standard"
+    ],
+    "env": {
+      "browser": true,
+      "es2022": true,
+      "jest": true
+    },
+    "globals": {
+      "game": "readonly",
+      "ui": "readonly",
+      "Hooks": "readonly",
+      "ChatMessage": "readonly",
+      "Actor": "readonly",
+      "Item": "readonly",
+      "Scene": "readonly",
+      "JournalEntry": "readonly",
+      "Macro": "readonly",
+      "RollTable": "readonly",
+      "Playlist": "readonly",
+      "Roll": "readonly",
+      "CONST": "readonly"
+    },
+    "rules": {
+      "no-console": "warn",
+      "no-unused-vars": "error",
+      "prefer-const": "error",
+      "no-var": "error"
+    }
+  },
+  "browserslist": [
+    "last 2 Chrome versions",
+    "last 2 Firefox versions",
+    "last 2 Safari versions",
+    "last 2 Edge versions"
+  ],
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/Felipe-Alves-VNGX"
+  },
+  "files": [
+    "module.json",
+    "scripts/",
+    "styles/",
+    "lang/",
+    "templates/",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ]
+}

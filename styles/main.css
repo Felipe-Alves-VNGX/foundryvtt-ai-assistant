@@ -1,0 +1,24 @@
+/* Estilos principais do AI Assistant */
+
+.ai-assistant-chat-message {
+    border-left: 3px solid #00ff00;
+    background-color: rgba(0, 255, 0, 0.1);
+}
+
+.ai-assistant-config {
+    max-width: 600px;
+}
+
+.ai-assistant-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ai-assistant-status.online {
+    color: #00ff00;
+}
+
+.ai-assistant-status.offline {
+    color: #ff0000;
+}
