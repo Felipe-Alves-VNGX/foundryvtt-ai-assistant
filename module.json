@@ -9,12 +9,13 @@
   },
   "authors": [
     {
-      "name": "Desenvolvedor IA",
-      "email": "dev@example.com"
+      "name": "Felipe Alves",
+      "email": "felipe@vngx.com.br",
+      "url": "https://github.com/Felipe-Alves-VNGX"
     }
   ],
-  "scripts": [
-    "scripts/main.js"
+  "esmodules": [
+    "index.js"
   ],
   "styles": [
     "styles/main.css"
@@ -29,9 +30,43 @@
       "lang": "pt-BR", 
       "name": "Português (Brasil)",
       "path": "lang/pt-BR.json"
+    },
+    {
+      "lang": "es",
+      "name": "Español",
+      "path": "lang/es.json"
+    },
+    {
+      "lang": "fr",
+      "name": "Français",
+      "path": "lang/fr.json"
+    },
+    {
+      "lang": "de",
+      "name": "Deutsch",
+      "path": "lang/de.json"
     }
   ],
   "socket": true,
+  "relationships": {
+    "systems": [
+      {
+        "id": "dnd5e",
+        "type": "system",
+        "compatibility": {
+          "minimum": "2.0.0"
+        }
+      }
+    ],
+    "requires": [],
+    "optional": []
+  },
+  "flags": {
+    "hotReload": {
+      "extensions": ["css", "hbs"],
+      "paths": ["styles", "templates", "lang"]
+    }
+  },
   "url": "https://github.com/Felipe-Alves-VNGX/foundryvtt-ai-assistant",
   "manifest": "https://github.com/Felipe-Alves-VNGX/foundryvtt-ai-assistant/releases/latest/download/module.json",
   "download": "https://github.com/Felipe-Alves-VNGX/foundryvtt-ai-assistant/releases/download/v1.0.0/foundryvtt-ai-assistant-v1.0.0.zip"
