@@ -9,6 +9,7 @@ import { PermissionManager } from './permissions.js';
 import { ChatInterface } from './chat-interface.js';
 import { ManusProvider } from './providers/manus.js';
 import { OpenAIProvider } from './providers/openai.js';
+import { ConfigInterface, registerConfigCommand } from './config-interface.js';
 
 class AIAssistant {
     constructor() {
@@ -41,6 +42,9 @@ class AIAssistant {
             
             // Configurar API pública
             this.setupPublicAPI();
+            
+            // Registrar comando de configuração
+            registerConfigCommand(this);
             
             this.initialized = true;
             const initTime = Date.now() - this.startTime;
@@ -114,9 +118,14 @@ class AIAssistant {
     }
 
     getStoredConfig() {
-        // Simular storage - em FoundryVTT real seria game.settings.get()
+        // Usar game.settings para persistência real no FoundryVTT
         try {
-            return JSON.parse(localStorage.getItem('ai-assistant-config') || '{}');
+            if (typeof game !== 'undefined' && game.settings) {
+                return game.settings.get('foundryvtt-ai-assistant', 'config') || {};
+            } else {
+                // Fallback para desenvolvimento/testes
+                return JSON.parse(localStorage.getItem('ai-assistant-config') || '{}');
+            }
         } catch {
             return {};
         }
@@ -209,27 +218,103 @@ class AIAssistant {
     setupFoundryHooks() {
         console.log('AI Assistant | Configurando hooks do FoundryVTT...');
         
-        // Simular hooks do FoundryVTT para demonstração
-        // Em implementação real, usaria Hooks.on() do FoundryVTT
-        this.simulateFoundryHooks();
-    }
+        if (typeof Hooks !== 'undefined') {
+            // Hook para quando o chat é renderizado
+            Hooks.on('renderChatLog', (app, html, data) => {
+                if (this.components.chatInterface) {
+                    this.components.chatInterface.onChatLogRender(app, html, data);
+                }
+            });
 
-    simulateFoundryHooks() {
-        // Simular sistema de hooks do FoundryVTT
-        console.log('AI Assistant | Hooks configurados (simulação)');
+            // Hook para mensagens de chat
+            Hooks.on('createChatMessage', (message, options, userId) => {
+                if (this.components.chatInterface) {
+                    this.components.chatInterface.onChatMessage(message, options, userId);
+                }
+            });
+
+            // Hook para quando um ator é atualizado
+            Hooks.on('updateActor', (actor, data, options, userId) => {
+                if (this.components.apiHandler) {
+                    this.components.apiHandler.onActorUpdate(actor, data, options, userId);
+                }
+            });
+
+            // Hook para quando configurações são alteradas
+            Hooks.on('closeSettingsConfig', () => {
+                this.loadConfiguration();
+            });
+
+            console.log('AI Assistant | Hooks do FoundryVTT configurados');
+        } else {
+            // Fallback para desenvolvimento/testes
+            console.log('AI Assistant | Hooks configurados (modo desenvolvimento)');
+        }
     }
 
     registerModuleSettings() {
         console.log('AI Assistant | Registrando configurações do módulo...');
         
-        // Simular registro de configurações
-        // Em FoundryVTT real, usaria game.settings.register()
-        this.simulateSettingsRegistration();
-    }
+        if (typeof game !== 'undefined' && game.settings) {
+            // Configuração principal do módulo
+            game.settings.register('foundryvtt-ai-assistant', 'config', {
+                name: 'AI Assistant Configuration',
+                hint: 'Configurações internas do módulo AI Assistant',
+                scope: 'world',
+                config: false,
+                type: Object,
+                default: {}
+            });
 
-    simulateSettingsRegistration() {
-        // Simular registro de configurações
-        console.log('AI Assistant | Configurações registradas (simulação)');
+            // Configurações visíveis para o usuário
+            game.settings.register('foundryvtt-ai-assistant', 'enabled', {
+                name: 'AI Assistant Habilitado',
+                hint: 'Habilita ou desabilita o módulo AI Assistant',
+                scope: 'world',
+                config: true,
+                type: Boolean,
+                default: true,
+                onChange: value => {
+                    this.config.enabled = value;
+                    if (!value && this.components.chatInterface) {
+                        this.components.chatInterface.disable();
+                    }
+                }
+            });
+
+            game.settings.register('foundryvtt-ai-assistant', 'defaultProvider', {
+                name: 'Provedor de IA Padrão',
+                hint: 'Selecione o provedor de IA padrão',
+                scope: 'world',
+                config: true,
+                type: String,
+                choices: {
+                    'manus': 'Manus',
+                    'openai': 'OpenAI'
+                },
+                default: 'manus',
+                onChange: value => {
+                    this.setProvider(value);
+                }
+            });
+
+            game.settings.register('foundryvtt-ai-assistant', 'debugMode', {
+                name: 'Modo Debug',
+                hint: 'Habilita logs detalhados para depuração',
+                scope: 'world',
+                config: true,
+                type: Boolean,
+                default: false,
+                onChange: value => {
+                    this.config.debugMode = value;
+                }
+            });
+
+            console.log('AI Assistant | Configurações do FoundryVTT registradas');
+        } else {
+            // Fallback para desenvolvimento/testes
+            console.log('AI Assistant | Configurações registradas (modo desenvolvimento)');
+        }
     }
 
     setupPublicAPI() {
@@ -263,7 +348,10 @@ class AIAssistant {
             // Utilitários
             approvePermission: (action) => this.approvePermission(action),
             denyPermission: (action) => this.denyPermission(action),
-            resetModule: () => this.resetModule()
+            resetModule: () => this.resetModule(),
+            
+            // Interface de configuração
+            openConfig: () => ConfigInterface.show(this)
         };
 
         // Expor API globalmente
@@ -336,9 +424,14 @@ class AIAssistant {
 
     async saveConfiguration() {
         try {
-            // Simular salvamento - em FoundryVTT real seria game.settings.set()
-            localStorage.setItem('ai-assistant-config', JSON.stringify(this.config));
-            console.log('AI Assistant | Configuração salva');
+            if (typeof game !== 'undefined' && game.settings) {
+                await game.settings.set('foundryvtt-ai-assistant', 'config', this.config);
+                console.log('AI Assistant | Configuração salva no FoundryVTT');
+            } else {
+                // Fallback para desenvolvimento/testes
+                localStorage.setItem('ai-assistant-config', JSON.stringify(this.config));
+                console.log('AI Assistant | Configuração salva (modo desenvolvimento)');
+            }
         } catch (error) {
             console.error('AI Assistant | Erro ao salvar configuração:', error);
         }
@@ -444,22 +537,36 @@ async function initializeAIAssistant() {
     }
 }
 
-// Simular hooks do FoundryVTT para demonstração
-// Em implementação real, seria:
-// Hooks.once('init', initializeAIAssistant);
-
-// Para demonstração, inicializar imediatamente
-initializeAIAssistant().then(() => {
-    console.log('AI Assistant | Módulo pronto para uso!');
+// Inicialização usando hooks reais do FoundryVTT
+if (typeof Hooks !== 'undefined') {
+    // Hook de inicialização do FoundryVTT
+    Hooks.once('init', initializeAIAssistant);
     
-    // Demonstrar funcionalidades
-    console.log('AI Assistant | Estatísticas:', aiAssistant.getStats());
-    console.log('AI Assistant | API disponível em window.aiAssistantAPI');
-    console.log('AI Assistant | Instância disponível em window.aiAssistant');
-    
-}).catch(error => {
-    console.error('AI Assistant | Erro na inicialização:', error);
-});
+    // Hook quando o jogo está pronto
+    Hooks.once('ready', () => {
+        if (aiAssistant && aiAssistant.initialized) {
+            console.log('AI Assistant | Módulo pronto para uso!');
+            
+            // Notificar usuários se habilitado
+            if (aiAssistant.config.enabled && game.user.isGM) {
+                ui.notifications.info('AI Assistant carregado com sucesso!');
+            }
+        }
+    });
+} else {
+    // Fallback para desenvolvimento/testes
+    initializeAIAssistant().then(() => {
+        console.log('AI Assistant | Módulo pronto para uso (modo desenvolvimento)!');
+        
+        // Demonstrar funcionalidades
+        console.log('AI Assistant | Estatísticas:', aiAssistant.getStats());
+        console.log('AI Assistant | API disponível em window.aiAssistantAPI');
+        console.log('AI Assistant | Instância disponível em window.aiAssistant');
+        
+    }).catch(error => {
+        console.error('AI Assistant | Erro na inicialização:', error);
+    });
+}
 
 // Exportar para uso em outros módulos
 export { AIAssistant, initializeAIAssistant };
