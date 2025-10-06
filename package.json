@@ -10,14 +10,17 @@
     "test:coverage": "jest --coverage",
     "lint": "eslint scripts/ --ext .js",
     "lint:fix": "eslint scripts/ --ext .js --fix",
-    "build": "npm run lint && npm run test",
-    "dev": "npm run build && npm run serve",
+    "build:dev": "webpack --config webpack.config.cjs --mode development",
+    "build:prod": "webpack --config webpack.config.cjs --mode production",
+    "build": "npm run lint && npm run build:prod",
+    "dev": "npm run build:dev && npm run serve",
     "serve": "http-server . -p 8080 -c-1",
-    "package": "npm run build && zip -r foundryvtt-ai-assistant.zip module.json scripts/ styles/ lang/ templates/ README.md LICENSE CHANGELOG.md",
-    "release": "npm run package && echo 'Release package created: foundryvtt-ai-assistant.zip'",
+    "package": "npm run build && zip -r foundryvtt-ai-assistant.zip module.json index.js index.js.map styles/ lang/ templates/ README.md LICENSE CHANGELOG.md",
+    "release": "node scripts/create-release.cjs",
+    "release:manual": "npm run package && echo 'Release package created: foundryvtt-ai-assistant.zip'",
     "docs": "jsdoc scripts/ -d docs/ -r",
-    "validate": "node scripts/validate-module.js",
-    "clean": "rm -rf node_modules/ coverage/ docs/ *.zip"
+    "validate": "node scripts/validate-module.cjs",
+    "clean": "rm -rf node_modules/ coverage/ docs/ *.zip index.js index.js.map"
   },
   "repository": {
     "type": "git",
@@ -52,7 +55,11 @@
     "npm": ">=8.0.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.23.0",
+    "@babel/preset-env": "^7.23.0",
     "@types/jest": "^29.5.8",
+    "babel-jest": "^30.2.0",
+    "babel-loader": "^9.1.3",
     "eslint": "^8.54.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.29.0",
@@ -61,14 +68,17 @@
     "http-server": "^14.1.1",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
-    "jsdoc": "^4.0.2"
+    "jsdoc": "^4.0.2",
+    "terser-webpack-plugin": "^5.3.10",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
   },
   "dependencies": {},
-  "peerDependencies": {
-    "foundryvtt": ">=10.0.0"
-  },
   "jest": {
     "testEnvironment": "jsdom",
+    "transform": {
+      "^.+\\.js$": ["babel-jest", { "presets": [["@babel/preset-env", { "targets": { "node": "current" } }]] }]
+    },
     "collectCoverageFrom": [
       "scripts/**/*.js",
       "!scripts/**/*.test.js",
