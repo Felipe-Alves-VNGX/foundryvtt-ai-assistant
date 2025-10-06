@@ -1,0 +1,130 @@
+{
+  "AI_ASSISTANT": {
+    "title": "KI-Assistent",
+    "description": "Vollständige Integration zwischen FoundryVTT und KI-Assistenten",
+    
+    "config": {
+      "title": "KI-Assistent Konfiguration",
+      
+      "provider": {
+        "label": "Standard KI-Anbieter",
+        "hint": "Wählen Sie den standardmäßig zu verwendenden KI-Anbieter",
+        "enabled": "Aktiviert",
+        "apiKey": "API-Schlüssel",
+        "apiKeyPlaceholder": "Geben Sie hier Ihren API-Schlüssel ein",
+        "model": "Modell",
+        "maxTokens": "Maximale Tokens",
+        "temperature": "Temperatur"
+      },
+      
+      "enabled": {
+        "label": "KI-Assistent Aktiviert",
+        "hint": "Aktiviert oder deaktiviert das KI-Assistent Modul"
+      },
+      
+      "debug": {
+        "label": "Debug-Modus",
+        "hint": "Aktiviert detaillierte Logs für die Fehlersuche"
+      },
+      
+      "commandPrefix": {
+        "label": "Befehlspräfix",
+        "hint": "Präfix für KI-Assistent Befehle im Chat"
+      },
+      
+      "autoCreateUser": {
+        "label": "KI-Benutzer Automatisch Erstellen",
+        "hint": "Erstellt automatisch einen Benutzer zur Darstellung der KI im Spiel"
+      },
+      
+      "providers": {
+        "title": "Anbieter-Konfiguration"
+      },
+      
+      "permissions": {
+        "title": "Berechtigungen",
+        "defaultLevel": "Standard-Berechtigungsstufe",
+        "defaultLevelHint": "Standard-Berechtigungsstufe für die KI",
+        "rateLimit": "Ratenbegrenzung Aktiviert",
+        "rateLimitHint": "Begrenzt die Anzahl der Anfragen pro Minute",
+        "maxRequests": "Maximale Anfragen pro Minute",
+        "maxRequestsHint": "Maximale Anzahl von Anfragen, die die KI pro Minute stellen kann"
+      },
+      
+      "ui": {
+        "title": "Benutzeroberfläche",
+        "showStatus": "Status im Chat Anzeigen",
+        "compactMode": "Kompakter Modus",
+        "conversationHistory": "Gesprächsverlauf-Limit"
+      }
+    },
+    
+    "chat": {
+      "aiUserName": "KI-Assistent",
+      "thinking": "Denkt nach...",
+      "error": "Fehler beim Verarbeiten der Anfrage",
+      "noPermission": "Keine Berechtigung für diese Aktion",
+      "rateLimited": "Ratenlimit erreicht. Versuchen Sie es später erneut.",
+      "providerError": "KI-Anbieter Fehler",
+      "invalidCommand": "Ungültiger Befehl",
+      
+      "commands": {
+        "help": "Verfügbare Befehle anzeigen",
+        "status": "Assistent-Status anzeigen",
+        "config": "Konfigurationen öffnen (nur GM)",
+        "reset": "Modul zurücksetzen (nur GM)",
+        "provider": "KI-Anbieter wechseln (nur GM)"
+      }
+    },
+    
+    "permissions": {
+      "levels": {
+        "NONE": "Keine",
+        "BASIC": "Grundlegend",
+        "INTERMEDIATE": "Fortgeschritten",
+        "ADVANCED": "Erweitert",
+        "FULL": "Vollständig"
+      },
+      
+      "actions": {
+        "readActors": "Akteur-Informationen lesen",
+        "readItems": "Gegenstand-Informationen lesen",
+        "readScenes": "Szenen-Informationen lesen",
+        "readJournals": "Journal-Einträge lesen",
+        "createChatMessage": "Chat-Nachrichten erstellen",
+        "rollDice": "Würfel werfen",
+        "modifyActors": "Akteure modifizieren",
+        "modifyItems": "Gegenstände modifizieren",
+        "modifyScenes": "Szenen modifizieren",
+        "createActors": "Akteure erstellen",
+        "createItems": "Gegenstände erstellen",
+        "createJournals": "Journal-Einträge erstellen",
+        "executeScripts": "Skripte ausführen",
+        "accessAPI": "Vollständigen API-Zugriff"
+      }
+    },
+    
+    "notifications": {
+      "initialized": "KI-Assistent erfolgreich initialisiert",
+      "configSaved": "Konfiguration erfolgreich gespeichert",
+      "configReset": "Konfiguration auf Standardwerte zurückgesetzt",
+      "providerChanged": "KI-Anbieter zu {provider} gewechselt",
+      "connectionTest": "Verbindung mit {provider} erfolgreich getestet",
+      "connectionError": "Fehler beim Testen der Verbindung: {error}",
+      "permissionGranted": "Berechtigung '{permission}' der KI gewährt",
+      "permissionDenied": "Berechtigung '{permission}' der KI verweigert"
+    },
+    
+    "errors": {
+      "initializationFailed": "Initialisierung des KI-Assistenten fehlgeschlagen",
+      "configLoadFailed": "Laden der Konfiguration fehlgeschlagen",
+      "configSaveFailed": "Speichern der Konfiguration fehlgeschlagen",
+      "providerNotFound": "Anbieter '{provider}' nicht gefunden",
+      "invalidApiKey": "Ungültiger API-Schlüssel",
+      "networkError": "Netzwerkfehler",
+      "rateLimitExceeded": "Ratenlimit überschritten",
+      "insufficientPermissions": "Unzureichende Berechtigungen",
+      "unknownError": "Unbekannter Fehler"
+    }
+  }
+}

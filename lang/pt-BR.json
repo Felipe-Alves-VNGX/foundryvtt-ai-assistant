@@ -1,21 +1,130 @@
 {
-    "AI_ASSISTANT": {
-        "Title": "Assistente IA",
-        "Description": "Assistente IA para FoundryVTT",
-        "Settings": {
-            "Provider": "Provedor de IA",
-            "ApiKey": "Chave da API",
-            "Permissions": "Permissões"
-        },
-        "Commands": {
-            "Help": "Mostrar comandos disponíveis",
-            "Status": "Mostrar status do sistema",
-            "Roll": "Rolar dados"
-        },
-        "Messages": {
-            "Initialized": "Assistente IA inicializado com sucesso",
-            "Error": "Erro no Assistente IA",
-            "PermissionDenied": "Permissão negada"
-        }
+  "AI_ASSISTANT": {
+    "title": "Assistente IA",
+    "description": "Integração completa entre FoundryVTT e assistentes de IA",
+    
+    "config": {
+      "title": "Configuração do Assistente IA",
+      
+      "provider": {
+        "label": "Provedor de IA Padrão",
+        "hint": "Selecione o provedor de IA a ser usado por padrão",
+        "enabled": "Habilitado",
+        "apiKey": "Chave API",
+        "apiKeyPlaceholder": "Digite sua chave API aqui",
+        "model": "Modelo",
+        "maxTokens": "Máximo de Tokens",
+        "temperature": "Temperatura"
+      },
+      
+      "enabled": {
+        "label": "Assistente IA Habilitado",
+        "hint": "Habilita ou desabilita o módulo Assistente IA"
+      },
+      
+      "debug": {
+        "label": "Modo Debug",
+        "hint": "Habilita logs detalhados para depuração"
+      },
+      
+      "commandPrefix": {
+        "label": "Prefixo de Comando",
+        "hint": "Prefixo usado para comandos do assistente IA no chat"
+      },
+      
+      "autoCreateUser": {
+        "label": "Criar Usuário IA Automaticamente",
+        "hint": "Cria automaticamente um usuário para representar a IA no jogo"
+      },
+      
+      "providers": {
+        "title": "Configuração de Provedores"
+      },
+      
+      "permissions": {
+        "title": "Permissões",
+        "defaultLevel": "Nível de Permissão Padrão",
+        "defaultLevelHint": "Nível de permissão padrão para a IA",
+        "rateLimit": "Limite de Taxa Habilitado",
+        "rateLimitHint": "Limita o número de solicitações por minuto",
+        "maxRequests": "Máximo de Solicitações por Minuto",
+        "maxRequestsHint": "Número máximo de solicitações que a IA pode fazer por minuto"
+      },
+      
+      "ui": {
+        "title": "Interface do Usuário",
+        "showStatus": "Mostrar Status no Chat",
+        "compactMode": "Modo Compacto",
+        "conversationHistory": "Limite do Histórico de Conversa"
+      }
+    },
+    
+    "chat": {
+      "aiUserName": "Assistente IA",
+      "thinking": "Pensando...",
+      "error": "Erro ao processar solicitação",
+      "noPermission": "Sem permissão para esta ação",
+      "rateLimited": "Limite de taxa atingido. Tente novamente mais tarde.",
+      "providerError": "Erro do provedor de IA",
+      "invalidCommand": "Comando inválido",
+      
+      "commands": {
+        "help": "Mostrar comandos disponíveis",
+        "status": "Mostrar status do assistente",
+        "config": "Abrir configurações (apenas GM)",
+        "reset": "Reiniciar módulo (apenas GM)",
+        "provider": "Alterar provedor de IA (apenas GM)"
+      }
+    },
+    
+    "permissions": {
+      "levels": {
+        "NONE": "Nenhuma",
+        "BASIC": "Básica",
+        "INTERMEDIATE": "Intermediária",
+        "ADVANCED": "Avançada",
+        "FULL": "Completa"
+      },
+      
+      "actions": {
+        "readActors": "Ler informações de atores",
+        "readItems": "Ler informações de itens",
+        "readScenes": "Ler informações de cenas",
+        "readJournals": "Ler entradas de diário",
+        "createChatMessage": "Criar mensagens de chat",
+        "rollDice": "Rolar dados",
+        "modifyActors": "Modificar atores",
+        "modifyItems": "Modificar itens",
+        "modifyScenes": "Modificar cenas",
+        "createActors": "Criar atores",
+        "createItems": "Criar itens",
+        "createJournals": "Criar entradas de diário",
+        "executeScripts": "Executar scripts",
+        "accessAPI": "Acessar API completa"
+      }
+    },
+    
+    "notifications": {
+      "initialized": "Assistente IA inicializado com sucesso",
+      "configSaved": "Configuração salva com sucesso",
+      "configReset": "Configuração reiniciada para valores padrão",
+      "providerChanged": "Provedor de IA alterado para {provider}",
+      "connectionTest": "Conexão com {provider} testada com sucesso",
+      "connectionError": "Erro ao testar conexão: {error}",
+      "permissionGranted": "Permissão '{permission}' concedida à IA",
+      "permissionDenied": "Permissão '{permission}' negada à IA"
+    },
+    
+    "errors": {
+      "initializationFailed": "Falha ao inicializar o Assistente IA",
+      "configLoadFailed": "Falha ao carregar configuração",
+      "configSaveFailed": "Falha ao salvar configuração",
+      "providerNotFound": "Provedor '{provider}' não encontrado",
+      "invalidApiKey": "Chave API inválida",
+      "networkError": "Erro de rede",
+      "rateLimitExceeded": "Limite de taxa excedido",
+      "insufficientPermissions": "Permissões insuficientes",
+      "unknownError": "Erro desconhecido"
     }
+  }
 }

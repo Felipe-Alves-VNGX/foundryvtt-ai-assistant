@@ -1,0 +1,130 @@
+{
+  "AI_ASSISTANT": {
+    "title": "Assistant IA",
+    "description": "Intégration complète entre FoundryVTT et les assistants IA",
+    
+    "config": {
+      "title": "Configuration de l'Assistant IA",
+      
+      "provider": {
+        "label": "Fournisseur IA par Défaut",
+        "hint": "Sélectionnez le fournisseur IA à utiliser par défaut",
+        "enabled": "Activé",
+        "apiKey": "Clé API",
+        "apiKeyPlaceholder": "Entrez votre clé API ici",
+        "model": "Modèle",
+        "maxTokens": "Maximum de Tokens",
+        "temperature": "Température"
+      },
+      
+      "enabled": {
+        "label": "Assistant IA Activé",
+        "hint": "Active ou désactive le module Assistant IA"
+      },
+      
+      "debug": {
+        "label": "Mode Debug",
+        "hint": "Active les logs détaillés pour le débogage"
+      },
+      
+      "commandPrefix": {
+        "label": "Préfixe de Commande",
+        "hint": "Préfixe utilisé pour les commandes de l'assistant IA dans le chat"
+      },
+      
+      "autoCreateUser": {
+        "label": "Créer Utilisateur IA Automatiquement",
+        "hint": "Crée automatiquement un utilisateur pour représenter l'IA dans le jeu"
+      },
+      
+      "providers": {
+        "title": "Configuration des Fournisseurs"
+      },
+      
+      "permissions": {
+        "title": "Permissions",
+        "defaultLevel": "Niveau de Permission par Défaut",
+        "defaultLevelHint": "Niveau de permission par défaut pour l'IA",
+        "rateLimit": "Limite de Débit Activée",
+        "rateLimitHint": "Limite le nombre de requêtes par minute",
+        "maxRequests": "Maximum de Requêtes par Minute",
+        "maxRequestsHint": "Nombre maximum de requêtes que l'IA peut faire par minute"
+      },
+      
+      "ui": {
+        "title": "Interface Utilisateur",
+        "showStatus": "Afficher le Statut dans le Chat",
+        "compactMode": "Mode Compact",
+        "conversationHistory": "Limite de l'Historique de Conversation"
+      }
+    },
+    
+    "chat": {
+      "aiUserName": "Assistant IA",
+      "thinking": "Réflexion...",
+      "error": "Erreur lors du traitement de la demande",
+      "noPermission": "Pas de permissions pour cette action",
+      "rateLimited": "Limite de débit atteinte. Réessayez plus tard.",
+      "providerError": "Erreur du fournisseur IA",
+      "invalidCommand": "Commande invalide",
+      
+      "commands": {
+        "help": "Afficher les commandes disponibles",
+        "status": "Afficher le statut de l'assistant",
+        "config": "Ouvrir les configurations (GM seulement)",
+        "reset": "Réinitialiser le module (GM seulement)",
+        "provider": "Changer le fournisseur IA (GM seulement)"
+      }
+    },
+    
+    "permissions": {
+      "levels": {
+        "NONE": "Aucun",
+        "BASIC": "Basique",
+        "INTERMEDIATE": "Intermédiaire",
+        "ADVANCED": "Avancé",
+        "FULL": "Complet"
+      },
+      
+      "actions": {
+        "readActors": "Lire les informations des acteurs",
+        "readItems": "Lire les informations des objets",
+        "readScenes": "Lire les informations des scènes",
+        "readJournals": "Lire les entrées de journal",
+        "createChatMessage": "Créer des messages de chat",
+        "rollDice": "Lancer les dés",
+        "modifyActors": "Modifier les acteurs",
+        "modifyItems": "Modifier les objets",
+        "modifyScenes": "Modifier les scènes",
+        "createActors": "Créer des acteurs",
+        "createItems": "Créer des objets",
+        "createJournals": "Créer des entrées de journal",
+        "executeScripts": "Exécuter des scripts",
+        "accessAPI": "Accéder à l'API complète"
+      }
+    },
+    
+    "notifications": {
+      "initialized": "Assistant IA initialisé avec succès",
+      "configSaved": "Configuration sauvegardée avec succès",
+      "configReset": "Configuration réinitialisée aux valeurs par défaut",
+      "providerChanged": "Fournisseur IA changé pour {provider}",
+      "connectionTest": "Connexion avec {provider} testée avec succès",
+      "connectionError": "Erreur lors du test de connexion : {error}",
+      "permissionGranted": "Permission '{permission}' accordée à l'IA",
+      "permissionDenied": "Permission '{permission}' refusée à l'IA"
+    },
+    
+    "errors": {
+      "initializationFailed": "Échec de l'initialisation de l'Assistant IA",
+      "configLoadFailed": "Échec du chargement de la configuration",
+      "configSaveFailed": "Échec de la sauvegarde de la configuration",
+      "providerNotFound": "Fournisseur '{provider}' non trouvé",
+      "invalidApiKey": "Clé API invalide",
+      "networkError": "Erreur réseau",
+      "rateLimitExceeded": "Limite de débit dépassée",
+      "insufficientPermissions": "Permissions insuffisantes",
+      "unknownError": "Erreur inconnue"
+    }
+  }
+}

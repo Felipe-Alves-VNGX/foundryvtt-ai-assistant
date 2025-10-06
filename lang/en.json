@@ -1,21 +1,130 @@
 {
-    "AI_ASSISTANT": {
-        "Title": "AI Assistant",
-        "Description": "AI Assistant for FoundryVTT",
-        "Settings": {
-            "Provider": "AI Provider",
-            "ApiKey": "API Key",
-            "Permissions": "Permissions"
-        },
-        "Commands": {
-            "Help": "Show available commands",
-            "Status": "Show system status",
-            "Roll": "Roll dice"
-        },
-        "Messages": {
-            "Initialized": "AI Assistant initialized successfully",
-            "Error": "Error in AI Assistant",
-            "PermissionDenied": "Permission denied"
-        }
+  "AI_ASSISTANT": {
+    "title": "AI Assistant",
+    "description": "Complete integration between FoundryVTT and AI assistants",
+    
+    "config": {
+      "title": "AI Assistant Configuration",
+      
+      "provider": {
+        "label": "Default AI Provider",
+        "hint": "Select the AI provider to use by default",
+        "enabled": "Enabled",
+        "apiKey": "API Key",
+        "apiKeyPlaceholder": "Enter your API key here",
+        "model": "Model",
+        "maxTokens": "Maximum Tokens",
+        "temperature": "Temperature"
+      },
+      
+      "enabled": {
+        "label": "AI Assistant Enabled",
+        "hint": "Enables or disables the AI Assistant module"
+      },
+      
+      "debug": {
+        "label": "Debug Mode",
+        "hint": "Enables detailed logs for debugging"
+      },
+      
+      "commandPrefix": {
+        "label": "Command Prefix",
+        "hint": "Prefix used for AI assistant commands in chat"
+      },
+      
+      "autoCreateUser": {
+        "label": "Auto Create AI User",
+        "hint": "Automatically creates a user to represent the AI in the game"
+      },
+      
+      "providers": {
+        "title": "Provider Configuration"
+      },
+      
+      "permissions": {
+        "title": "Permissions",
+        "defaultLevel": "Default Permission Level",
+        "defaultLevelHint": "Default permission level for the AI",
+        "rateLimit": "Rate Limit Enabled",
+        "rateLimitHint": "Limits the number of requests per minute",
+        "maxRequests": "Maximum Requests per Minute",
+        "maxRequestsHint": "Maximum number of requests the AI can make per minute"
+      },
+      
+      "ui": {
+        "title": "User Interface",
+        "showStatus": "Show Status in Chat",
+        "compactMode": "Compact Mode",
+        "conversationHistory": "Conversation History Limit"
+      }
+    },
+    
+    "chat": {
+      "aiUserName": "AI Assistant",
+      "thinking": "Thinking...",
+      "error": "Error processing request",
+      "noPermission": "No permission for this action",
+      "rateLimited": "Rate limit reached. Try again later.",
+      "providerError": "AI provider error",
+      "invalidCommand": "Invalid command",
+      
+      "commands": {
+        "help": "Show available commands",
+        "status": "Show assistant status",
+        "config": "Open configurations (GM only)",
+        "reset": "Reset module (GM only)",
+        "provider": "Change AI provider (GM only)"
+      }
+    },
+    
+    "permissions": {
+      "levels": {
+        "NONE": "None",
+        "BASIC": "Basic",
+        "INTERMEDIATE": "Intermediate",
+        "ADVANCED": "Advanced",
+        "FULL": "Full"
+      },
+      
+      "actions": {
+        "readActors": "Read actor information",
+        "readItems": "Read item information",
+        "readScenes": "Read scene information",
+        "readJournals": "Read journal entries",
+        "createChatMessage": "Create chat messages",
+        "rollDice": "Roll dice",
+        "modifyActors": "Modify actors",
+        "modifyItems": "Modify items",
+        "modifyScenes": "Modify scenes",
+        "createActors": "Create actors",
+        "createItems": "Create items",
+        "createJournals": "Create journal entries",
+        "executeScripts": "Execute scripts",
+        "accessAPI": "Access full API"
+      }
+    },
+    
+    "notifications": {
+      "initialized": "AI Assistant initialized successfully",
+      "configSaved": "Configuration saved successfully",
+      "configReset": "Configuration reset to default values",
+      "providerChanged": "AI provider changed to {provider}",
+      "connectionTest": "Connection with {provider} tested successfully",
+      "connectionError": "Error testing connection: {error}",
+      "permissionGranted": "Permission '{permission}' granted to AI",
+      "permissionDenied": "Permission '{permission}' denied to AI"
+    },
+    
+    "errors": {
+      "initializationFailed": "Failed to initialize AI Assistant",
+      "configLoadFailed": "Failed to load configuration",
+      "configSaveFailed": "Failed to save configuration",
+      "providerNotFound": "Provider '{provider}' not found",
+      "invalidApiKey": "Invalid API key",
+      "networkError": "Network error",
+      "rateLimitExceeded": "Rate limit exceeded",
+      "insufficientPermissions": "Insufficient permissions",
+      "unknownError": "Unknown error"
     }
+  }
 }
