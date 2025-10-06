@@ -2,7 +2,7 @@
   "id": "foundryvtt-ai-assistant",
   "title": "FoundryVTT AI Assistant",
   "description": "Integração completa entre FoundryVTT e assistentes de IA (Manus, OpenAI, Claude)",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "compatibility": {
     "minimum": "11",
     "verified": "12"

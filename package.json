@@ -1,6 +1,6 @@
 {
   "name": "foundryvtt-ai-assistant",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Módulo completo para FoundryVTT que integra assistentes de IA (Manus, OpenAI, Claude) diretamente no seu jogo",
   "main": "scripts/main.js",
   "type": "module",
