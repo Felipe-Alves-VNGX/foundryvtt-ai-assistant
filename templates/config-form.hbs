@@ -1,0 +1,145 @@
+<form class="ai-assistant-config">
+    <div class="form-group">
+        <label for="ai-provider">{{localize "AI_ASSISTANT.config.provider.label"}}</label>
+        <select id="ai-provider" name="defaultProvider">
+            {{#each providers}}
+            <option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>
+            {{/each}}
+        </select>
+        <p class="notes">{{localize "AI_ASSISTANT.config.provider.hint"}}</p>
+    </div>
+
+    <div class="form-group">
+        <label for="ai-enabled">{{localize "AI_ASSISTANT.config.enabled.label"}}</label>
+        <input type="checkbox" id="ai-enabled" name="enabled" {{#if enabled}}checked{{/if}}>
+        <p class="notes">{{localize "AI_ASSISTANT.config.enabled.hint"}}</p>
+    </div>
+
+    <div class="form-group">
+        <label for="debug-mode">{{localize "AI_ASSISTANT.config.debug.label"}}</label>
+        <input type="checkbox" id="debug-mode" name="debugMode" {{#if debugMode}}checked{{/if}}>
+        <p class="notes">{{localize "AI_ASSISTANT.config.debug.hint"}}</p>
+    </div>
+
+    <div class="form-group">
+        <label for="command-prefix">{{localize "AI_ASSISTANT.config.commandPrefix.label"}}</label>
+        <input type="text" id="command-prefix" name="commandPrefix" value="{{commandPrefix}}" placeholder="/ai">
+        <p class="notes">{{localize "AI_ASSISTANT.config.commandPrefix.hint"}}</p>
+    </div>
+
+    <div class="form-group">
+        <label for="auto-create-user">{{localize "AI_ASSISTANT.config.autoCreateUser.label"}}</label>
+        <input type="checkbox" id="auto-create-user" name="autoCreateAIUser" {{#if autoCreateAIUser}}checked{{/if}}>
+        <p class="notes">{{localize "AI_ASSISTANT.config.autoCreateUser.hint"}}</p>
+    </div>
+
+    <hr>
+
+    <h3>{{localize "AI_ASSISTANT.config.providers.title"}}</h3>
+
+    {{#each providerConfigs}}
+    <div class="provider-config" data-provider="{{@key}}">
+        <h4>{{name}}</h4>
+        
+        <div class="form-group">
+            <label for="{{@key}}-enabled">{{localize "AI_ASSISTANT.config.provider.enabled"}}</label>
+            <input type="checkbox" id="{{@key}}-enabled" name="providers.{{@key}}.enabled" {{#if enabled}}checked{{/if}}>
+        </div>
+
+        <div class="form-group">
+            <label for="{{@key}}-api-key">{{localize "AI_ASSISTANT.config.provider.apiKey"}}</label>
+            <input type="password" id="{{@key}}-api-key" name="providers.{{@key}}.apiKey" value="{{apiKey}}" placeholder="{{localize 'AI_ASSISTANT.config.provider.apiKeyPlaceholder'}}">
+        </div>
+
+        <div class="form-group">
+            <label for="{{@key}}-model">{{localize "AI_ASSISTANT.config.provider.model"}}</label>
+            <select id="{{@key}}-model" name="providers.{{@key}}.model">
+                {{#each models}}
+                <option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>
+                {{/each}}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="{{@key}}-max-tokens">{{localize "AI_ASSISTANT.config.provider.maxTokens"}}</label>
+            <input type="number" id="{{@key}}-max-tokens" name="providers.{{@key}}.maxTokens" value="{{maxTokens}}" min="100" max="8000">
+        </div>
+
+        <div class="form-group">
+            <label for="{{@key}}-temperature">{{localize "AI_ASSISTANT.config.provider.temperature"}}</label>
+            <input type="range" id="{{@key}}-temperature" name="providers.{{@key}}.temperature" value="{{temperature}}" min="0" max="1" step="0.1">
+            <span class="range-value">{{temperature}}</span>
+        </div>
+    </div>
+    {{/each}}
+
+    <hr>
+
+    <h3>{{localize "AI_ASSISTANT.config.permissions.title"}}</h3>
+
+    <div class="form-group">
+        <label for="permission-level">{{localize "AI_ASSISTANT.config.permissions.defaultLevel"}}</label>
+        <select id="permission-level" name="defaultPermissionLevel">
+            {{#each permissionLevels}}
+            <option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>
+            {{/each}}
+        </select>
+        <p class="notes">{{localize "AI_ASSISTANT.config.permissions.defaultLevelHint"}}</p>
+    </div>
+
+    <div class="form-group">
+        <label for="rate-limit">{{localize "AI_ASSISTANT.config.permissions.rateLimit"}}</label>
+        <input type="checkbox" id="rate-limit" name="rateLimitEnabled" {{#if rateLimitEnabled}}checked{{/if}}>
+        <p class="notes">{{localize "AI_ASSISTANT.config.permissions.rateLimitHint"}}</p>
+    </div>
+
+    <div class="form-group">
+        <label for="max-requests">{{localize "AI_ASSISTANT.config.permissions.maxRequests"}}</label>
+        <input type="number" id="max-requests" name="maxRequestsPerMinute" value="{{maxRequestsPerMinute}}" min="1" max="100">
+        <p class="notes">{{localize "AI_ASSISTANT.config.permissions.maxRequestsHint"}}</p>
+    </div>
+
+    <hr>
+
+    <h3>{{localize "AI_ASSISTANT.config.ui.title"}}</h3>
+
+    <div class="form-group">
+        <label for="show-status">{{localize "AI_ASSISTANT.config.ui.showStatus"}}</label>
+        <input type="checkbox" id="show-status" name="showStatusInChat" {{#if showStatusInChat}}checked{{/if}}>
+    </div>
+
+    <div class="form-group">
+        <label for="compact-mode">{{localize "AI_ASSISTANT.config.ui.compactMode"}}</label>
+        <input type="checkbox" id="compact-mode" name="compactMode" {{#if compactMode}}checked{{/if}}>
+    </div>
+
+    <div class="form-group">
+        <label for="conversation-history">{{localize "AI_ASSISTANT.config.ui.conversationHistory"}}</label>
+        <input type="number" id="conversation-history" name="conversationHistoryLimit" value="{{conversationHistoryLimit}}" min="10" max="500">
+    </div>
+</form>
+
+<script>
+// Atualizar valores de range em tempo real
+document.querySelectorAll('input[type="range"]').forEach(range => {
+    const valueSpan = range.nextElementSibling;
+    range.addEventListener('input', () => {
+        valueSpan.textContent = range.value;
+    });
+});
+
+// Habilitar/desabilitar configurações de provedor baseado no checkbox
+document.querySelectorAll('.provider-config input[type="checkbox"]').forEach(checkbox => {
+    const providerDiv = checkbox.closest('.provider-config');
+    const inputs = providerDiv.querySelectorAll('input:not([type="checkbox"]), select');
+    
+    function toggleInputs() {
+        inputs.forEach(input => {
+            input.disabled = !checkbox.checked;
+        });
+    }
+    
+    checkbox.addEventListener('change', toggleInputs);
+    toggleInputs(); // Aplicar estado inicial
+});
+</script>
